@@ -1,2 +1,3 @@
 # alpine-node-nixstats
-Docker image to add nixstats to alpine node
+
+This Docker image adds new packages and python environment in order to add nixstats to the latest alpine-node image.
