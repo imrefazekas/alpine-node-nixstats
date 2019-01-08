@@ -8,6 +8,8 @@ RUN pip install --upgrade pip
 RUN pip install nixstatsagent
 
 ADD rsyslog.conf /etc/rsyslog.conf
+ADD nixstats.ini /etc/nixstats.ini
+
 EXPOSE 514 514/udp
 VOLUME [ "/var/log", "/etc/rsyslog.d" ]
 
