@@ -5,8 +5,6 @@ RUN apk update && apk add --no-cache make gcc g++ git openssh wget nano python p
 RUN apk add rsyslog rsyslog-tls
 RUN npm i -g npm@latest
 
-RUN npm i -g pino-syslog pino-socket
-
 RUN pip install --upgrade pip
 RUN pip install nixstatsagent
 
