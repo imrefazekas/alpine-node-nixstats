@@ -1,32 +1,26 @@
 FROM mhart/alpine-node:latest
 
 ## OS related
-RUN apk update && apk add --no-cache make gcc g++ git openssh wget nano python python-dev py-pip build-base linux-headers bash
-RUN apk add rsyslog rsyslog-tls
+RUN apk update && apk add --no-cache make gcc g++ git openssh wget nano python python-dev py-pip build-base linux-headers bash rsyslog rsyslog-tls
 RUN npm i -g npm@latest
 
 RUN pip install --upgrade pip
 RUN pip install nixstatsagent
 
+## Nixstats related
 ADD rsyslog.conf /etc/rsyslog.conf
 ADD nixstats.ini /etc/nixstats.ini
+ADD 31-nixstats.conf /etc/rsyslog.d/31-nixstats.conf
+ADD nixstats.ca /etc/rsyslog.d/keys/nixstats.ca
 
-EXPOSE 514 514/udp
-VOLUME [ "/var/log", "/etc/rsyslog.d" ]
+RUN mkdir -p /var/spool/rsyslog
+RUN mkdir -p /etc/rsyslog.d/keys
 
-ARG NIXSTATS_USERID=INVALID
-ENV NIXSTATS_USERID="${NIXSTATS_USERID}"
+VOLUME [ "/var/log" ]
 
-ARG NIXSTATS_LOGID=INVALID
-ENV NIXSTATS_LOGID="${NIXSTATS_USERID}"
+## Add scripts
+ADD log-setup.sh /log-setup.sh
+ADD entrypoint.sh /entrypoint.sh
+RUN chmod 777 /entrypoint.sh /log-setup.sh
 
-RUN mkdir /app
-WORKDIR /app
-## RUN wget -q -N https://www.nixstats.com/log.sh
-COPY log.sh /app
-RUN bash log.sh -u $NIXSTATS_LOGID
-
-RUN nixstatshello $NIXSTATS_USERID /etc/nixstats-token.ini
-
-ENTRYPOINT [ "rsyslogd", "-n" ]
-## RUN nohup bash -c "nixstatsagent &"
+ENTRYPOINT ["/entrypoint.sh"]
