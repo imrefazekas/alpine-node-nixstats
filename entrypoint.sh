@@ -16,4 +16,4 @@ nohup bash -c "nixstatsagent" &
 rsyslogd
 
 #Start the main process defined in CMD
-exec "$@" | tee >(logger -t "$NODE_ENV")
+exec "$@" | tee >(logger -t "$NODE_ENV") 2>&1
