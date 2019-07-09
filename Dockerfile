@@ -1,7 +1,7 @@
 FROM mhart/alpine-node:10.15.3
 
 ## OS related
-RUN apk update && apk add --no-cache make gcc g++ git openssh wget nano python python-dev py-pip build-base linux-headers bash rsyslog rsyslog-tls
+RUN apk update && apk add --no-cache make gcc g++ git openssh wget nano python python-dev py-pip build-base linux-headers bash rsyslog rsyslog-tls gmp-dev
 RUN npm i -g npm@latest
 
 RUN pip install --upgrade pip
